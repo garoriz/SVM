@@ -19,6 +19,7 @@ def near_points(point):
 
 if __name__ == '__main__':
     RED = 'red'
+    BLUE = 'blue'
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     screen.fill(color="#FFFFFF")
@@ -38,17 +39,13 @@ if __name__ == '__main__':
                     coord = event.pos
                     points.append(coord)
                     pygame.draw.circle(screen, color=RED, center=coord, radius=5)
+                if event.button == 3:
+                    is_pressed = True
+                    coord = event.pos
+                    points.append(coord)
+                    pygame.draw.circle(screen, color=BLUE, center=coord, radius=5)
             if event.type == pygame.MOUSEBUTTONUP:
                 is_pressed = False
-            if event.type == pygame.MOUSEMOTION:
-                if is_pressed:
-                    if dist(event.pos, points[-1]) > 20:
-                        coord = event.pos
-                        pygame.draw.circle(screen, color=RED, center=coord, radius=5)
-                        for nearP in near_points(coord):
-                            pygame.draw.circle(screen, color=RED, center=nearP, radius=5)
-                            points.append(nearP)
-                        points.append(coord)
             if event.type == pygame.KEYUP:
                 if event.key == 13:
                     count_of_keyup = count_of_keyup + 1
