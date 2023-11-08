@@ -1,6 +1,8 @@
 import pygame
 import numpy as np
 import random
+from sklearn import svm
+import matplotlib.pyplot as plt
 
 
 def dist(pointA, pointB):
@@ -17,6 +19,18 @@ def near_points(point):
     return points_array
 
 
+def create_straight():
+    svm_algorithm = svm.SVC(kernel='linear')
+    svm_algorithm.fit(points, classes_of_points)
+
+    w = svm_algorithm.coef_[0]
+
+    a = -w[0] / w[1]
+    xx = np.linspace(100, 500, 600)
+    yy = (a * xx - svm_algorithm.intercept_[0] / w[1])
+    pygame.draw.line(screen, (0, 0, 0), (xx[0], yy[0]), (xx[len(xx) - 1], yy[len(yy) - 1]), 2)
+
+
 if __name__ == '__main__':
     RED = 'red'
     BLUE = 'blue'
@@ -27,6 +41,7 @@ if __name__ == '__main__':
     is_active = True
     is_pressed = False
     points = []
+    classes_of_points = []
     count_of_keyup = 0
     while (is_active):
         for event in pygame.event.get():
@@ -38,11 +53,13 @@ if __name__ == '__main__':
                     is_pressed = True
                     coord = event.pos
                     points.append(coord)
+                    classes_of_points.append(1)
                     pygame.draw.circle(screen, color=RED, center=coord, radius=5)
                 if event.button == 3:
                     is_pressed = True
                     coord = event.pos
                     points.append(coord)
+                    classes_of_points.append(2)
                     pygame.draw.circle(screen, color=BLUE, center=coord, radius=5)
             if event.type == pygame.MOUSEBUTTONUP:
                 is_pressed = False
@@ -50,7 +67,7 @@ if __name__ == '__main__':
                 if event.key == 13:
                     count_of_keyup = count_of_keyup + 1
                     if count_of_keyup == 1:
-                        pass
+                        create_straight()
                     else:
                         pass
 
