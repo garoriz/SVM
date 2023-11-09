@@ -26,7 +26,7 @@ def create_straight():
     w = svm_algorithm.coef_[0]
 
     a = -w[0] / w[1]
-    xx = np.linspace(100, 500, 600)
+    xx = np.linspace(0, 1000, 1500)
     yy = (a * xx - svm_algorithm.intercept_[0] / w[1])
     pygame.draw.line(screen, (0, 0, 0), (xx[0], yy[0]), (xx[len(xx) - 1], yy[len(yy) - 1]), 2)
 
