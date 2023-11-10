@@ -61,6 +61,12 @@ if __name__ == '__main__':
                     points.append(coord)
                     classes_of_points.append(2)
                     pygame.draw.circle(screen, color=BLUE, center=coord, radius=5)
+                if event.button == 2:
+                    is_pressed = True
+                    coord = event.pos
+                    points.append(coord)
+                    # classes_of_points.append(2)
+                    pygame.draw.circle(screen, color='black', center=coord, radius=5)
             if event.type == pygame.MOUSEBUTTONUP:
                 is_pressed = False
             if event.type == pygame.KEYUP:
