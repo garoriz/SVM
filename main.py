@@ -20,7 +20,6 @@ def near_points(point):
 
 
 def create_straight():
-    svm_algorithm = svm.SVC(kernel='linear')
     svm_algorithm.fit(points, classes_of_points)
 
     w = svm_algorithm.coef_[0]
@@ -31,11 +30,40 @@ def create_straight():
     pygame.draw.line(screen, (0, 0, 0), (xx[0], yy[0]), (xx[len(xx) - 1], yy[len(yy) - 1]), 2)
 
 
+def compare_with_straight(new_point):
+    w = svm_algorithm.coef_[0]
+    a = -w[0] / w[1]
+    b = -svm_algorithm.intercept_[0] / w[1]
+
+    x_0 = new_point[0]
+    y_0 = HEIGHT - new_point[1]
+
+    y_predicted = HEIGHT - (a * x_0 + b)
+
+    if y_0 > y_predicted:
+        return 1
+    else:
+        return -1
+
+
+def determine_class():
+    point = points[0]
+    if compare_with_straight_result == compare_with_straight(point) and classes_of_points[0] == 1:
+        return 1
+    if compare_with_straight_result == compare_with_straight(point) and classes_of_points[0] == 2:
+        return 2
+    if compare_with_straight_result != compare_with_straight(point) and classes_of_points[0] == 1:
+        return 2
+    if compare_with_straight_result != compare_with_straight(point) and classes_of_points[0] == 2:
+        return 1
+
+
 if __name__ == '__main__':
+    HEIGHT = 400
     RED = 'red'
     BLUE = 'blue'
     pygame.init()
-    screen = pygame.display.set_mode((600, 400))
+    screen = pygame.display.set_mode((600, HEIGHT))
     screen.fill(color="#FFFFFF")
     pygame.display.update()
     is_active = True
@@ -43,6 +71,7 @@ if __name__ == '__main__':
     points = []
     classes_of_points = []
     count_of_keyup = 0
+    svm_algorithm = svm.SVC(kernel='linear')
     while (is_active):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -65,7 +94,9 @@ if __name__ == '__main__':
                     is_pressed = True
                     coord = event.pos
                     points.append(coord)
-                    # classes_of_points.append(2)
+                    compare_with_straight_result = compare_with_straight(coord)
+                    determined_class = determine_class()
+                    classes_of_points.append(determined_class)
                     pygame.draw.circle(screen, color='black', center=coord, radius=5)
             if event.type == pygame.MOUSEBUTTONUP:
                 is_pressed = False
