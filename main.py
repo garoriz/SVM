@@ -58,6 +58,13 @@ def determine_class():
         return 1
 
 
+def draw_circle():
+    if determined_class == 1:
+        pygame.draw.circle(screen, color=RED, center=coord, radius=5)
+    if determined_class == 2:
+        pygame.draw.circle(screen, color=BLUE, center=coord, radius=5)
+
+
 if __name__ == '__main__':
     HEIGHT = 400
     RED = 'red'
@@ -97,7 +104,7 @@ if __name__ == '__main__':
                     compare_with_straight_result = compare_with_straight(coord)
                     determined_class = determine_class()
                     classes_of_points.append(determined_class)
-                    pygame.draw.circle(screen, color='black', center=coord, radius=5)
+                    draw_circle()
             if event.type == pygame.MOUSEBUTTONUP:
                 is_pressed = False
             if event.type == pygame.KEYUP:
